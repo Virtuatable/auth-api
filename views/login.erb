@@ -1,0 +1,33 @@
+<DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <div class="full-size valign-wrapper">
+      <div class="login-wrapper">
+        <div class="card">
+          <div class="card-content">
+            <div class="card-title">Login</div>
+            <p>
+              <form method="post" action="">
+                <div class="input-field">
+                  <label for="username">Username</label>
+                  <input type="text" class="validate" id="username" name="username" required />
+                </div>
+                <div class="input-field">
+                  <label for="password">Password</label>
+                  <input type="password" class="validate" id="password" name="password" required />
+                </div>
+                <input type="hidden" name="authenticity_token" value="<%= env['rack.session'][:csrf] %>" />
+                <button class="waves-effet waves-light btn" type="submit">Log in</button>
+              </form>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
