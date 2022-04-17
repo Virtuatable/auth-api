@@ -1,8 +1,0 @@
-en:
-  application_id:
-    forbidden: "The application you provided is not a premium application."
-    required: "You must provide an application UUID in the query parameters."
-    unknown: "The application you provided does not exist."
-  redirect_uri:
-    required: "You must provide a redirection URI in the query parameters."
-    unknown: "The provided redirect URI does not match any of the redirection URI of the application."

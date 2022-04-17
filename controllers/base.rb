@@ -2,15 +2,10 @@ module Controllers
   class Base < Core::Controllers::Base
 
     configure do
-      I18n.default_locale = :en
-      
       set :root, File.join(File.dirname(__FILE__), '..')
       set :views, Proc.new { File.join(root, 'views') }
       set :public_folder, Proc.new { File.join(root, 'public') }
-      set :locales, File.join(File.dirname(__FILE__), '..', 'config', 'locales', 'en.yml')
     end
-
-    register Sinatra::I18n
 
     # Checks that all the given fields are provided by the user. If a field is not given
     # as a URI parameter, it renders the error template.
@@ -26,8 +21,7 @@ module Controllers
     def application
       application = Core::Models::OAuth::Application.find(params['application_id'])
       error 404, 'application_id.unknown' if application.nil?
-      error 403, 'application_id.forbidden' if !application.premium
-      application
+      Decorators::Application.new(application)
     end
 
     def check_redirect_uri(application, redirect_uri)
