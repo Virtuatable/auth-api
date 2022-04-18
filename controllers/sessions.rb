@@ -8,24 +8,18 @@ module Controllers
       erb :login, locals: {csrf_token: env['rack.session'][:csrf]}
     end
 
+    post '/app-check' do
+      halt 200, {application: application, redirect_uri: redirect_uri}.to_json
+    end
+
     post '/sessions' do
-      check_fields_presence 'username', 'password', 'redirect_uri', 'application_id'
-      uri = check_redirect_uri(application, params['redirect_uri'])
+      check_fields_presence 'password'
       session = Services::Sessions.instance.create(account)
       if application.premium
         authorization = Services::Authorizations.instance.create(account, application)
-        uri.add_param('authorization_code', authorization[:code])
-        halt 201, {
-          session: session,
-          authorization: authorization,
-          redirect_uri: uri,
-          application: application.to_h
-        }.to_json
+        halt 201, {session: session, authorization: authorization}.to_json
       else
-        halt 201, {
-          session: session,
-          application: application.to_h
-        }.to_json
+        halt 201, {session: session}.to_json
       end
     end
 

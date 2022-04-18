@@ -19,13 +19,15 @@ module Controllers
     # Checks that the application from the application ID provided by the user exists
     # and that it is a premium application. If not it raises an error.
     def application
+      check_fields_presence 'application_id'
       application = Core::Models::OAuth::Application.find(params['application_id'])
       error 404, 'application_id.unknown' if application.nil?
       Decorators::Application.new(application)
     end
 
-    def check_redirect_uri(application, redirect_uri)
-      uri = URI(redirect_uri)
+    def redirect_uri
+      check_fields_presence 'redirect_uri'
+      uri = URI(params['redirect_uri'])
       unless application.redirect_uris.include? uri.to_s.split('?').first
         error 404, 'redirect_uri.unknown'
       end
@@ -33,6 +35,7 @@ module Controllers
     end
 
     def account
+      check_fields_presence 'username'
       account = Core::Models::Account.find_by(username: params['username'])
       error 404, 'username.unknown' if account.nil?
       user_pwd = BCrypt::Password.new(account.password_digest)
