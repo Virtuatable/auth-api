@@ -27,11 +27,11 @@ module Controllers
 
     def redirect_uri
       check_fields_presence 'redirect_uri'
-      uri = URI(params['redirect_uri'])
+      uri = params['redirect_uri']
       unless application.redirect_uris.include? uri.to_s.split('?').first
         error 404, 'redirect_uri.unknown'
       end
-      uri
+      return URI(uri)
     end
 
     def account

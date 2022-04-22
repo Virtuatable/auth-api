@@ -4,12 +4,25 @@ module Controllers
     use Rack::Session::Cookie, secret: 'secret'
     use Rack::Protection::AuthenticityToken
 
+    get '/sessions/:session_id' do
+      return 200, Decorators::Session.new(session).to_h.to_json
+    end
+
     get '/*' do
       erb :login, locals: {csrf_token: env['rack.session'][:csrf]}
     end
 
     post '/app-check' do
-      halt 200, {application: application, redirect_uri: redirect_uri}.to_json
+      halt 200, {application: application.to_h, redirect_uri: redirect_uri}.to_json
+    end
+
+    post '/authorizations' do
+      session
+      authorization = Core::Models::OAuth::Authorization.create(
+        account: session.account,
+        application: application
+      )
+      halt 201, {code: authorization.code}.to_json
     end
 
     post '/sessions' do
@@ -17,7 +30,10 @@ module Controllers
       session = Services::Sessions.instance.create(account)
       if application.premium
         authorization = Services::Authorizations.instance.create(account, application)
-        halt 201, {session: session, authorization: authorization}.to_json
+        halt 201, {
+          session: session.to_h,
+          authorization: authorization
+        }.to_json
       else
         halt 201, {session: session}.to_json
       end
