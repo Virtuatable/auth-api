@@ -1,32 +1,21 @@
 version: 2.1
 
-executors:
-  mr:
+jobs:
+  rspec:
     docker:
       - image: cimg/ruby:3.0.0
       - image: circleci/mongo:4.0.28-xenial-ram
-
-jobs:
-  rspec:
-    executor: "mr"
     steps:
       - checkout
       - run:
-          name: "Dependencies installation"
-          command: "bundle"
-      - run:
-          name: "Run tests in the repository"
-          command: "bundle exec rspec"
+          command: bundle install && bundle exec rspec
   rubocop:
-    executor: "mr"
+    docker:
+      - image: cimg/ruby:3.0.0
     steps:
       - checkout
       - run:
-          name: "Dependencies installation"
-          command: "bundle"
-      - run:
-          name: "Run linter to check code appearance"
-          command: "bundle exec rubocop"
+          command: bundle install && bundle exec rubocop
 
 workflows:
   build:
