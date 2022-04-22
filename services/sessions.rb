@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'securerandom'
 
 module Services
@@ -11,7 +13,7 @@ module Services
     # @return [Core::Models::Authentication::Session] the created session
     def create(account)
       session = Core::Models::Authentication::Session.create(
-        account:account,
+        account: account,
         token: SecureRandom.hex
       )
       Decorators::Session.new(session).to_h

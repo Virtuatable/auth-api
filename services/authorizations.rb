@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 module Services
   class Authorizations
     include Singleton
 
-    def create (account, application)
+    def create(account, application)
       authorization = Core::Models::OAuth::Authorization.create(
         account: account,
         application: application

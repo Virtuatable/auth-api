@@ -1,10 +1,11 @@
+# frozen_string_literal: true
+
 module Controllers
   class Base < Core::Controllers::Base
-
     configure do
       set :root, File.join(File.dirname(__FILE__), '..')
-      set :views, Proc.new { File.join(root, 'views') }
-      set :public_folder, Proc.new { File.join(root, 'public') }
+      set :views, (proc { File.join(root, 'views') })
+      set :public_folder, (proc { File.join(root, 'public') })
     end
 
     # Checks that all the given fields are provided by the user. If a field is not given
@@ -28,10 +29,8 @@ module Controllers
     def redirect_uri
       check_fields_presence 'redirect_uri'
       uri = params['redirect_uri']
-      unless application.redirect_uris.include? uri.to_s.split('?').first
-        api_not_found 'redirect_uri.unknown'
-      end
-      return URI(uri)
+      api_not_found 'redirect_uri.unknown' unless application.redirect_uris.include? uri.to_s.split('?').first
+      URI(uri)
     end
 
     def account
@@ -48,11 +47,10 @@ module Controllers
     end
 
     def self.init_csrf
-      # This condition is made to avoid tests failing because we don't pass CSRF token.
-      if ENV['RACK_ENV'] != 'test'
-        use Rack::Session::Cookie, secret: 'secret'
-        use Rack::Protection::AuthenticityToken
-      end
+      return if ENV['RACK_ENV'] == 'test'
+
+      use Rack::Session::Cookie, secret: 'secret'
+      use Rack::Protection::AuthenticityToken
     end
   end
 end

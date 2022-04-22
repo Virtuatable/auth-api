@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Controllers
   class Sessions < Controllers::Base
     init_csrf
@@ -8,7 +10,7 @@ module Controllers
 
     post '/' do
       check_password
-      halt 201, {session: Services::Sessions.instance.create(account)}.to_json
+      halt 201, { session: Services::Sessions.instance.create(account) }.to_json
     end
   end
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'bundler'
 Bundler.require :test
 
@@ -13,6 +15,6 @@ require 'uri/https'
 require fp('../controllers/base')
 
 require_rel 'support/**/*.rb'
-['decorators', 'services', 'controllers'].each do |folder|
+%w[decorators services controllers].each do |folder|
   require_rel "../#{folder}/**/*.rb"
 end
