@@ -2,8 +2,9 @@ version: 2.1
 
 executors:
   mr:
-    - image: cimg/ruby:3.0.0
-    - image: circleci/mongo:4.0.28-xenial-ram
+    docker:
+      - image: cimg/ruby:3.0.0
+      - image: circleci/mongo:4.0.28-xenial-ram
 
 jobs:
   rspec:
