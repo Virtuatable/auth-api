@@ -5,8 +5,6 @@ module Controllers
   # a usable access token that will be passed to the API.
   # @author Vincent Courtois <courtois.vincent@outlook.com>
   class Tokens < Base
-    init_csrf
-
     post '/' do
       token = Core::Models::OAuth::AccessToken.create(authorization: authorization)
       api_created({ token: token.value })
