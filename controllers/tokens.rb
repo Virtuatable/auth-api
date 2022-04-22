@@ -1,19 +1,14 @@
 module Controllers
-  class Tokens < Controllers::Base
+  class Tokens < Base
+    init_csrf
 
     post '/' do
-      check_fields_presence 'authorization_code', 'application_id'
-      token = Core::Models::OAuth::AccessToken.create(
-        authorization: authorization
-      )
+      token = Core::Models::OAuth::AccessToken.create(authorization: authorization)
       api_created({token: token.value})
     end
 
-    def error(code, translation)
-      api_error code, translation
-    end
-
     def authorization
+      check_fields_presence 'authorization_code'
       authorization = Core::Models::OAuth::Authorization.find_by(
         code: params['authorization_code']
       )

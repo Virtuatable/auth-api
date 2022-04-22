@@ -12,7 +12,7 @@ module Controllers
     # @param fields [Array<string>] the name of the fields to check the presence.
     def check_fields_presence(*fields)
       fields.each do |field|
-        error 400, "#{field}.required" unless field_defined? field
+        api_bad_request "#{field}.required" unless field_defined? field
       end
     end
 
@@ -21,7 +21,7 @@ module Controllers
     def application
       check_fields_presence 'application_id'
       application = Core::Models::OAuth::Application.find(params['application_id'])
-      error 404, 'application_id.unknown' if application.nil?
+      api_not_found 'application_id.unknown' if application.nil?
       Decorators::Application.new(application)
     end
 
@@ -29,7 +29,7 @@ module Controllers
       check_fields_presence 'redirect_uri'
       uri = params['redirect_uri']
       unless application.redirect_uris.include? uri.to_s.split('?').first
-        error 404, 'redirect_uri.unknown'
+        api_not_found 'redirect_uri.unknown'
       end
       return URI(uri)
     end
@@ -37,10 +37,22 @@ module Controllers
     def account
       check_fields_presence 'username'
       account = Core::Models::Account.find_by(username: params['username'])
-      error 404, 'username.unknown' if account.nil?
-      user_pwd = BCrypt::Password.new(account.password_digest)
-      error 403, 'password.wrong' if user_pwd != params['password']
+      api_not_found 'username.unknown' if account.nil?
       account
+    end
+
+    def check_password
+      check_fields_presence 'password'
+      user_pwd = BCrypt::Password.new(account.password_digest)
+      api_forbidden 'password.wrong' if user_pwd != params['password']
+    end
+
+    def self.init_csrf
+      # This condition is made to avoid tests failing because we don't pass CSRF token.
+      if ENV['RACK_ENV'] != 'test'
+        use Rack::Session::Cookie, secret: 'secret'
+        use Rack::Protection::AuthenticityToken
+      end
     end
   end
 end
