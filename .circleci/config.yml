@@ -1,0 +1,24 @@
+version: 2.1
+
+jobs:
+  rspec:
+    docker:
+      - image: cimg/ruby:3.0.0
+      - image: circleci/mongo:4.0.28-xenial-ram
+    steps:
+      - checkout
+      - run:
+          command: bundle install && bundle exec rspec
+  rubocop:
+    docker:
+      - image: cimg/ruby:3.0.0
+    steps:
+      - checkout
+      - run:
+          command: bundle install && bundle exec rubocop
+
+workflows:
+  build:
+    jobs:
+      - rspec
+      - rubocop
