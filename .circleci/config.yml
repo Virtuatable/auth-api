@@ -8,6 +8,9 @@ jobs:
     steps:
       - checkout
       - run:
+          name: "Dependencies installation"
+          command: "bundle"
+      - run:
           name: "Run tests in the repository"
           command: "bundle exec rspec"
 
