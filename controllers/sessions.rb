@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 module Controllers
+  # This controller holds actions regarding sessions, whether you want to
+  # create new ones, or to check that existing ones really exist.
+  # @author Vincent Courtois <courtois.vincent@outlook.com>
   class Sessions < Controllers::Base
     init_csrf
 

@@ -46,6 +46,21 @@ RSpec.describe Controllers::Sessions do
 
   describe 'POST /' do
     describe 'Nominal case' do
+      before do
+        post '/', {
+          username: account.username,
+          password: 'password'
+        }
+      end
+
+      it 'Returns a 201 (Created) status code' do
+        expect(last_response.status).to be 201
+      end
+      it 'Returns the correct body' do
+        expect(last_response.body).to include_json(
+          session: { token: Core::Models::Authentication::Session.first.token }
+        )
+      end
     end
 
     describe 'when the username is not given' do
