@@ -4,7 +4,7 @@ jobs:
   rspec:
     docker:
       - image: cimg/ruby:3.0.0
-      - image: circleci/mongodb:4.0.28-xenial-ram
+      - image: circleci/mongo:4.0.28-xenial-ram
     steps:
       - checkout
       - run:
