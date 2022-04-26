@@ -37,16 +37,16 @@ jobs:
           command: echo ${DOCKER_PASSWORD} | docker login --username ${DOCKER_USERNAME} --password-stdin
       - run:
           name: Fix the version for the docker and kubernetes executions
-          command: export VERSION=$(date +%s)
+          command: export DOCKER_TAG=$(date +%s) && echo ${DOCKER_TAG}
       - run:
           name: Build the image to be able to push it online
-          command: docker build -t virtuatable/auth-api:${VERSION} -f deployment/Dockerfile .
+          command: docker build -t virtuatable/auth-api:${DOCKER_TAG} -f deployment/Dockerfile .
       - run:
           name: Push the image to the DockerHub DTR
-          command: docker push virtuatable/auth-api:${VERSION}
+          command: docker push virtuatable/auth-api:${DOCKER_TAG}
       - run:
           name: Deploys the application on Kubernetes
-          command: sed -e "s/<VERSION>/${VERSION}/g" deployment/deployment.yml | kubectl apply -f -
+          command: sed -e "s/<VERSION>/${DOCKER_TAG}/g" deployment/deployment.yml | kubectl apply -f -
       - run:
           name: Creates the application load balancer
           command: kubectl apply -f deployment/service.yml
