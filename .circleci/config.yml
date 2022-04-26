@@ -25,8 +25,6 @@ jobs:
         auth:
           username: $DOCKER_USERNAME
           password: $DOCKER_PASSWORD
-    environment:
-      DOCKER_TAG: $(date +%s)
     steps:
       - checkout
       - kube/install-kubectl
@@ -39,7 +37,7 @@ jobs:
           command: echo ${DOCKER_PASSWORD} | docker login --username ${DOCKER_USERNAME} --password-stdin
       - run:
           name: Fix the version for the docker and kubernetes executions
-          command: echo ${DOCKER_TAG}
+          command: echo "export DOCKER_TAG=$(date +%s)" >> $BASH_ENV
       - run:
           name: Build the image to be able to push it online
           command: docker build -t virtuatable/auth-api:${DOCKER_TAG} -f deployment/Dockerfile .
