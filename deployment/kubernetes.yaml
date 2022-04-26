@@ -1,0 +1,75 @@
+# This file holds all the kubernetes needed resources
+# in one file to make it simpler to maintain.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: authentication
+  name: authentication-deployment
+  labels:
+    app: virtuatable-auth
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: virtuatable-auth
+  template:
+    metadata:
+      labels:
+        app: virtuatable-auth
+    spec:
+      containers:
+        - name: virtuatable-api
+          image: virtuatable/auth-api:[VERSION]
+          ports:
+            - containerPort: 9292
+          env:
+            - name: BS_ENDPOINT
+              valueFrom:
+                secretKeyRef:
+                  name: block-storage
+                  key: endpoint
+            - name: BS_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: block-storage
+                  key: access-key
+            - name: BS_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: block-storage
+                  key: secret-key
+            - name: UI_VERSION
+              valueFrom:
+                configMapKeyRef:
+                  name: gui
+                  key: version
+      
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: authentication
+  name: authentication-service
+spec:
+  selector:
+    app: virtuatable-auth
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 9292
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  namespace: authentication
+  name: authentication-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
+spec:
+  rules:
+    - http:
+        paths:
+          - path: "/(/|$)(.*)"
+            backend:
+              serviceName: authentication-service
+              servicePort: 80
