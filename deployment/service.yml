@@ -3,6 +3,8 @@ kind: Service
 metadata:
   namespace: authentication
   name: authentication-service
+  labels:
+    app: virtuatable-auth
 spec:
   selector:
     app: virtuatable-auth
