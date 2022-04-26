@@ -22,9 +22,9 @@ jobs:
   deploy:
     docker:
       - image: buildpack-deps:18.04
-          auth:
-            username: $DOCKER_USERNAME
-            password: $DOCKER_PASSWORD
+        auth:
+          username: $DOCKER_USERNAME
+          password: $DOCKER_PASSWORD
     steps:
       - checkout
       - kube/install-kubectl
