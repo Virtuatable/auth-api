@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
         - name: virtuatable-api
-          image: virtuatable/auth-api:[VERSION]
+          image: virtuatable/auth-api:<VERSION>
           ports:
             - containerPort: 9292
           env:
