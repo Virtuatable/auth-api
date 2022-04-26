@@ -1,5 +1,3 @@
-# This file holds all the kubernetes needed resources
-# in one file to make it simpler to maintain.
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -43,33 +41,3 @@ spec:
                 configMapKeyRef:
                   name: gui
                   key: version
-      
----
-apiVersion: v1
-kind: Service
-metadata:
-  namespace: authentication
-  name: authentication-service
-spec:
-  selector:
-    app: virtuatable-auth
-  ports:
-    - protocol: TCP
-      port: 80
-      targetPort: 9292
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  namespace: authentication
-  name: authentication-ingress
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /$1
-spec:
-  rules:
-    - http:
-        paths:
-          - path: "/(/|$)(.*)"
-            backend:
-              serviceName: authentication-service
-              servicePort: 80

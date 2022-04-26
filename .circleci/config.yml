@@ -46,7 +46,13 @@ jobs:
           command: docker push virtuatable/auth-api:${VERSION}
       - run:
           name: Deploys the application on Kubernetes
-          command: sed -e "s/[VERSION]/${VERSION}/g" deployment/kubernetes.yml | kubectl apply -f -
+          command: sed -e "s/<VERSION>/${VERSION}/g" deployment/deployment.yml | kubectl apply -f -
+      - run:
+          name: Creates the application load balancer
+          command: kubectl apply -f deployment/service.yml
+      - run:
+          name: Creates the ingress to access the app
+          command: kubectl apply -f deployment/ingress.yml
 
 workflows:
   build:
