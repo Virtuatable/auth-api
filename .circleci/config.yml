@@ -46,7 +46,7 @@ jobs:
           command: docker push virtuatable/auth-api:${VERSION}
       - run:
           name: Deploys the application on Kubernetes
-          command: sed -e "s/[VERSION]/${VERSION}/g deployment/kubernetes.yml" | kubectl apply -f -
+          command: sed -e "s/[VERSION]/${VERSION}/g" deployment/kubernetes.yml | kubectl apply -f -
 
 workflows:
   build:
