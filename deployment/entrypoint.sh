@@ -1,10 +1,10 @@
+#!/usr/bin/env bash
+
 function web {
-  # Installs the mc binary to copy the frontend from the S3 of scaleway
-  wget https://dl.min.io/client/mc/release/linux-amd64/mc && chmod +x ./mc
-  # Configure the mc binary to correctly copy data from scaleway
-  ./mc alias set virtuatable ${BS_ENDPOINT} ${BS_ACCESS_KEY} ${BS_SECRET_KEY}
-  # Copies the content of the version we want to deploy currently
-  ./mc cp --recursive virtuatable/auth-gui/${UI_VERSION} public/
+  # Installs the gem to use with the S3 script
+  gem install aws-sdk-s3
+  # Clones the folder marked as "current" in the public/ directory
+  ruby ./deployment/cloner.rb
   # Starts the application
   bundle exec puma
 }
@@ -21,3 +21,4 @@ case "$1" in
   "shell")
   shell
   ;;
+esac

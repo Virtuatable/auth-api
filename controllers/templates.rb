@@ -8,7 +8,10 @@ module Controllers
     init_csrf
 
     get '/*' do
-      erb :login, locals: { csrf_token: env['rack.session'][:csrf] }
+      erb :login, locals: {
+        csrf_token: env['rack.session'][:csrf],
+        ui_root: env['UI_ROOT_PATH']
+      }
     end
   end
 end

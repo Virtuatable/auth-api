@@ -1,6 +1,8 @@
 FROM ruby:3.0.0
 
-copy . .
+WORKDIR /auth
+
+COPY . /auth
 
 # Installs dependencies to be able to start the server
 RUN gem install bundler && bundle install

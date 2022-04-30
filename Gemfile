@@ -5,7 +5,8 @@ source 'https://rubygems.org/'
 group :development, :production, :test do
   gem 'draper'
   gem 'require_all'
-  gem 'virtuatable-core', require: 'core'
+  gem 'virtuatable-core', '1.3.1', require: 'core'
+  gem 'dotenv'
 end
 
 group :development, :production do
@@ -26,3 +27,4 @@ group :test do
 end
 
 gem 'rubocop'
+gem 'aws-sdk-s3'

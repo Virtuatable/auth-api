@@ -21,17 +21,12 @@ jobs:
           command: bundle install && bundle exec rubocop
   deploy:
     docker:
-      - image: cimg/go:1.18.1
-        auth:
-          username: $DOCKER_USERNAME
-          password: $DOCKER_PASSWORD
+      - image: cimg/ruby:3.0.0
     steps:
       - checkout
       - kube/install-kubectl
       - kube/install-kubeconfig
-      - setup_remote_docker:
-          version: 19.03.13
-          docker_layer_caching: true
+      - setup_remote_docker
       - run:
           name: Authenticate on DockerHub
           command: echo ${DOCKER_PASSWORD} | docker login --username ${DOCKER_USERNAME} --password-stdin
