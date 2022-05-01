@@ -55,6 +55,9 @@ workflows:
       - rspec
       - rubocop
       - deploy:
+          requires:
+            - rspec
+            - rubocop
           filters:
             branches:
               only:
