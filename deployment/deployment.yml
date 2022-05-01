@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: authentication
+  name: authentication-deployment
+  labels:
+    app: virtuatable-auth
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: virtuatable-auth
+  template:
+    metadata:
+      labels:
+        app: virtuatable-auth
+    spec:
+      dnsPolicy: Default
+      containers:
+        - name: virtuatable-api
+          image: virtuatable/auth-api:<VERSION>
+          args:
+            - web
+          ports:
+            - containerPort: 9292
+          env:
+            - name: BS_ENDPOINT
+              valueFrom:
+                secretKeyRef:
+                  name: block-storage
+                  key: endpoint
+            - name: BS_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: block-storage
+                  key: access-key
+            - name: BS_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: block-storage
+                  key: secret-key
+            # Required to load the correct environment in Mongoid.
+            - name: RACK_ENV
+              value: production
+            # Required because the mapping is done by the ingress in production.
+            - name: UI_ROOT_PATH
+              value: ""
+            - name: MONGODB_DATABASE_URI
+              valueFrom:
+                secretKeyRef:
+                  name: api
+                  key: database-uri

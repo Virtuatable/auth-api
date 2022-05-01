@@ -16,7 +16,7 @@ module Controllers
         code: params['authorization_code']
       )
       api_not_found 'authorization_code.unknown' if authorization.nil?
-      api_bad_request 'application_id.mismatch' if authorization.application.id != application.id
+      api_bad_request 'client_id.mismatch' if authorization.application.id != application.id
       authorization
     end
   end

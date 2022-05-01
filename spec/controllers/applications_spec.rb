@@ -11,7 +11,7 @@ RSpec.describe Controllers::Applications do
 
     describe 'Nominal case' do
       before do
-        get "/#{application.id}?redirect_uri=#{application.redirect_uris.first}"
+        get "/#{application.client_id}?redirect_uri=#{application.redirect_uris.first}"
       end
 
       it 'Returns a 200 (OK) status code' do
@@ -21,7 +21,7 @@ RSpec.describe Controllers::Applications do
       it 'Returns the correct body' do
         expect(last_response.body).to include_json(
           application: {
-            id: application.id.to_s,
+            client_id: application.client_id,
             name: application.name,
             premium: false
           },
@@ -34,7 +34,7 @@ RSpec.describe Controllers::Applications do
       let!(:uri) { "#{application.redirect_uris.first}?foo=bar" }
 
       before do
-        get "/#{application.id}?redirect_uri=#{CGI.escape(uri)}"
+        get "/#{application.client_id}?redirect_uri=#{CGI.escape(uri)}"
       end
 
       it 'Returns a 200 (OK) status code' do
@@ -44,7 +44,7 @@ RSpec.describe Controllers::Applications do
       it 'Returns the correct body' do
         expect(last_response.body).to include_json(
           application: {
-            id: application.id.to_s,
+            client_id: application.client_id,
             name: application.name,
             premium: false
           },
@@ -55,7 +55,7 @@ RSpec.describe Controllers::Applications do
 
     describe 'when the redirection URI is not given' do
       before do
-        get "/#{application.id}"
+        get "/#{application.client_id}"
       end
 
       it 'Returns a 400 (Bad Request) status code' do
@@ -80,14 +80,14 @@ RSpec.describe Controllers::Applications do
 
       it 'Returns the correct body' do
         expect(last_response.body).to include_json(
-          field: 'application_id', error: 'unknown'
+          field: 'client_id', error: 'unknown'
         )
       end
     end
 
     describe 'when the redirection URI is not in the application' do
       before do
-        get "/#{application.id}?redirect_uri=unknown"
+        get "/#{application.client_id}?redirect_uri=unknown"
       end
 
       it 'Returns a 404 (Not Found) status code' do

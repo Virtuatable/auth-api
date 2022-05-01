@@ -5,7 +5,7 @@ module Decorators
     delegate_all
 
     def to_h
-      { id: id.to_s, name: name, premium: premium }
+      { client_id: client_id, name: name, premium: premium }
     end
   end
 end

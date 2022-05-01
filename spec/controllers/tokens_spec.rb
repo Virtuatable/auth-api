@@ -16,7 +16,7 @@ RSpec.describe Controllers::Tokens do
       before do
         post '/', {
           authorization_code: authorization.code,
-          application_id: application.id.to_s
+          client_id: application.client_id
         }
       end
 
@@ -25,16 +25,15 @@ RSpec.describe Controllers::Tokens do
       end
 
       it 'Returns the correct body' do
-        expect(last_response.body).to include_json({
-                                                     token: Core::Models::OAuth::AccessToken.first.value
-                                                   })
+        expectation = Core::Models::OAuth::AccessToken.first.value
+        expect(last_response.body).to include_json({ token: expectation })
       end
     end
 
     describe 'When the authorization code is not given' do
       before do
         post '/', {
-          application_id: application.id.to_s
+          client_id: application.client_id
         }
       end
 
@@ -52,7 +51,7 @@ RSpec.describe Controllers::Tokens do
     describe 'When the authorization code is not found' do
       before do
         post '/', {
-          application_id: application.id.to_s,
+          client_id: application.client_id,
           authorization_code: 'unknown'
         }
       end
@@ -81,7 +80,7 @@ RSpec.describe Controllers::Tokens do
 
       it 'Returns the correct body' do
         expect(last_response.body).to include_json(
-          field: 'application_id', error: 'required'
+          field: 'client_id', error: 'required'
         )
       end
     end
@@ -89,7 +88,7 @@ RSpec.describe Controllers::Tokens do
     describe 'When the application ID is not found' do
       before do
         post '/', {
-          application_id: 'unknown',
+          client_id: 'unknown',
           authorization_code: authorization.code
         }
       end
@@ -100,7 +99,7 @@ RSpec.describe Controllers::Tokens do
 
       it 'Returns the correct body' do
         expect(last_response.body).to include_json(
-          field: 'application_id', error: 'unknown'
+          field: 'client_id', error: 'unknown'
         )
       end
     end
@@ -112,7 +111,7 @@ RSpec.describe Controllers::Tokens do
 
       before do
         post '/', {
-          application_id: second_app.id.to_s,
+          client_id: second_app.client_id,
           authorization_code: authorization.code
         }
       end
@@ -123,7 +122,7 @@ RSpec.describe Controllers::Tokens do
 
       it 'Returns the correct body' do
         expect(last_response.body).to include_json(
-          field: 'application_id', error: 'mismatch'
+          field: 'client_id', error: 'mismatch'
         )
       end
     end

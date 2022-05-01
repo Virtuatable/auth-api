@@ -3,9 +3,10 @@
 source 'https://rubygems.org/'
 
 group :development, :production, :test do
+  gem 'dotenv'
   gem 'draper'
   gem 'require_all'
-  gem 'virtuatable-core', require: 'core'
+  gem 'virtuatable-core', '1.3.1', require: 'core'
 end
 
 group :development, :production do
@@ -25,4 +26,5 @@ group :test do
   gem 'rspec-json_expectations'
 end
 
+gem 'aws-sdk-s3'
 gem 'rubocop'

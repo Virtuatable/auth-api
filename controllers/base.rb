@@ -6,15 +6,15 @@ module Controllers
   # @author Vincent Courtois <courtois.vincent@outlook.com>
   class Base < Core::Controllers::Base
     configure do
-      set :root, File.join(File.dirname(__FILE__), '..')
+      set :root, File.absolute_path(File.join(File.dirname(__FILE__), '..'))
       set :views, (proc { File.join(root, 'views') })
-      set :public_folder, (proc { File.join(root, 'public') })
+      set :public_folder, File.join(settings.root, 'public')
     end
 
-    def application
-      check_presence 'application_id'
-      application = Core::Models::OAuth::Application.find(params['application_id'])
-      api_not_found 'application_id.unknown' if application.nil?
+    def applications
+      check_presence 'client_id'
+      application = Core::Models::OAuth::Application.find_by(client_id: params['client_id'])
+      api_not_found 'client_id.unknown' if application.nil?
       Decorators::Application.new(application)
     end
 
