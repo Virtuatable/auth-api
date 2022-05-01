@@ -18,7 +18,7 @@ version = object.get.body.read.to_s.strip
 puts "[COPYING auth-gui/#{version}]"
 bucket.objects(prefix: "auth-gui/#{version}").each do |obj|
   key = obj.key.clone
-  key["auth-gui/#{version}"] = 'public/auth'
+  key["auth-gui/#{version}"] = 'public'
   File.write(key, obj.get.body.read.to_s)
   puts "#{obj.key} -> #{key}"
 end
