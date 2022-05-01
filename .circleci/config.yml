@@ -54,4 +54,8 @@ workflows:
     jobs:
       - rspec
       - rubocop
-      - deploy
+      - deploy:
+          filters:
+            branches:
+              only:
+                - master

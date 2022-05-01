@@ -18,7 +18,7 @@ spec:
       dnsPolicy: Default
       containers:
         - name: virtuatable-api
-          image: virtuatable/auth-api:1.0.0-dev27
+          image: virtuatable/auth-api:<VERSION>
           args:
             - web
           ports:
