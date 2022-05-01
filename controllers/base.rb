@@ -5,14 +5,13 @@ module Controllers
   # route-focused syntax in each of them by putting shared methods here.
   # @author Vincent Courtois <courtois.vincent@outlook.com>
   class Base < Core::Controllers::Base
-
     configure do
       set :root, File.absolute_path(File.join(File.dirname(__FILE__), '..'))
       set :views, (proc { File.join(root, 'views') })
       set :public_folder, File.join(settings.root, 'public')
     end
 
-    def Applications
+    def applications
       check_presence 'client_id'
       application = Core::Models::OAuth::Application.find_by(client_id: params['client_id'])
       api_not_found 'client_id.unknown' if application.nil?

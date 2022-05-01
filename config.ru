@@ -17,7 +17,7 @@ require_rel 'services/**/*.rb'
 require_rel 'decorators/**/*.rb'
 require_rel 'controllers/**/*.rb'
 
-root = ENV['UI_ROOT_PATH'] || ''
+root = ENV.fetch('UI_ROOT_PATH', nil) || ''
 
 map("#{root}/applications") { run Controllers::Applications.new }
 map("#{root}/authorizations") { run Controllers::Authorizations.new }

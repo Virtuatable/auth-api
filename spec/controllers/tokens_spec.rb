@@ -26,7 +26,7 @@ RSpec.describe Controllers::Tokens do
 
       it 'Returns the correct body' do
         expectation = Core::Models::OAuth::AccessToken.first.value
-        expect(last_response.body).to include_json({token: expectation})
+        expect(last_response.body).to include_json({ token: expectation })
       end
     end
 
