@@ -14,7 +14,7 @@ RSpec.describe Controllers::Authorizations do
       before do
         post '/', {
           session_id: session.token,
-          application_id: application.id.to_s
+          client_id: application.client_id
         }
       end
 
@@ -31,7 +31,7 @@ RSpec.describe Controllers::Authorizations do
 
     describe 'when the session ID is not given' do
       before do
-        post '/', { application_id: application.id.to_s }
+        post '/', { application_id: application.client_id }
       end
 
       it 'Returns a 400 (Bad Request) status code' do
@@ -48,7 +48,7 @@ RSpec.describe Controllers::Authorizations do
     describe 'when the session ID is not found' do
       before do
         post '/', {
-          application_id: application.id.to_s,
+          application_id: application.client_id,
           session_id: 'unknown'
         }
       end
@@ -77,7 +77,7 @@ RSpec.describe Controllers::Authorizations do
 
       it 'Returns the correct body' do
         expect(last_response.body).to include_json(
-          field: 'application_id', error: 'required'
+          field: 'client_id', error: 'required'
         )
       end
     end
@@ -85,7 +85,7 @@ RSpec.describe Controllers::Authorizations do
     describe 'when the application ID is not found' do
       before do
         post '/', {
-          application_id: 'unknown',
+          client_id: 'unknown',
           session_id: session.token
         }
       end
@@ -96,7 +96,7 @@ RSpec.describe Controllers::Authorizations do
 
       it 'Returns the correct body' do
         expect(last_response.body).to include_json(
-          field: 'application_id', error: 'unknown'
+          field: 'client_id', error: 'unknown'
         )
       end
     end
