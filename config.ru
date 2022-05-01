@@ -4,6 +4,7 @@ require 'require_all'
 require 'draper'
 require 'core'
 require 'dotenv/load'
+require 'bcrypt'
 
 Dotenv.load
 
@@ -18,12 +19,9 @@ require_rel 'controllers/**/*.rb'
 
 root = ENV['UI_ROOT_PATH'] || ''
 
-root = ''
-
-puts "mapped on #{root}"
-
 map("#{root}/applications") { run Controllers::Applications.new }
 map("#{root}/authorizations") { run Controllers::Authorizations.new }
 map("#{root}/sessions") { run Controllers::Sessions.new }
 map("#{root}/tokens") { run Controllers::Tokens.new }
-# map("#{root}/ui") { run Controllers::Templates.new }
+map("#{root}/ui") { run Controllers::Templates.new }
+map('/') { run Controllers::Base.new }

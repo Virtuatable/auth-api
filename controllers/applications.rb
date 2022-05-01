@@ -5,9 +5,9 @@ module Controllers
   # exists or not, and that the provided redirect URI is associated to it.
   # @author Vincent Courtois <courtois.vincent@outlook.com>
   class Applications < Base
-    get '/:application_id' do
+    get '/:client_id' do
       halt 200, {
-        application: application.to_h,
+        application: Decorators::Application.new(application).to_h,
         redirect_uri: redirect_uri
       }.to_json
     end
