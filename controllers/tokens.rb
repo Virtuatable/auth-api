@@ -6,8 +6,13 @@ module Controllers
   # @author Vincent Courtois <courtois.vincent@outlook.com>
   class Tokens < Base
     post '/' do
-      token = Core::Models::OAuth::AccessToken.create(authorization: authorization)
-      api_created({ token: token.value })
+      api_created Services::Tokens.instance.create(application, authorization)
+    end
+
+    def application
+      check_presence 'client_id', 'client_secret'
+      api_bad_request 'client_secret.wrong' if super.client_secret != params['client_secret']
+      super
     end
 
     def authorization

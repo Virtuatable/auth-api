@@ -16,7 +16,8 @@ RSpec.describe Controllers::Tokens do
       before do
         post '/', {
           authorization_code: authorization.code,
-          client_id: application.client_id
+          client_id: application.client_id,
+          client_secret: application.client_secret
         }
       end
 
@@ -33,7 +34,8 @@ RSpec.describe Controllers::Tokens do
     describe 'When the authorization code is not given' do
       before do
         post '/', {
-          client_id: application.client_id
+          client_id: application.client_id,
+          client_secret: application.client_secret
         }
       end
 
@@ -52,6 +54,7 @@ RSpec.describe Controllers::Tokens do
       before do
         post '/', {
           client_id: application.client_id,
+          client_secret: application.client_secret,
           authorization_code: 'unknown'
         }
       end
@@ -67,10 +70,11 @@ RSpec.describe Controllers::Tokens do
       end
     end
 
-    describe 'When the application ID is not given' do
+    describe 'When the client ID is not given' do
       before do
         post '/', {
-          authorization_code: authorization.code
+          authorization_code: authorization.code,
+          client_secret: application.client_secret
         }
       end
 
@@ -85,11 +89,12 @@ RSpec.describe Controllers::Tokens do
       end
     end
 
-    describe 'When the application ID is not found' do
+    describe 'When the client ID is not found' do
       before do
         post '/', {
           client_id: 'unknown',
-          authorization_code: authorization.code
+          authorization_code: authorization.code,
+          client_secret: application.client_secret
         }
       end
 
@@ -104,6 +109,45 @@ RSpec.describe Controllers::Tokens do
       end
     end
 
+    describe 'When the client secret is not given' do
+      before do
+        post '/', {
+          authorization_code: authorization.code,
+          client_id: application.client_id
+        }
+      end
+
+      it 'Returns a 400 (Bad Request) status code' do
+        expect(last_response.status).to be 400
+      end
+
+      it 'Returns the correct body' do
+        expect(last_response.body).to include_json(
+          field: 'client_secret', error: 'required'
+        )
+      end
+    end
+
+    describe 'When the client secret is not the correct one' do
+      before do
+        post '/', {
+          client_id: application.client_id,
+          authorization_code: authorization.code,
+          client_secret: 'wrong_secret'
+        }
+      end
+
+      it 'Returns a 400 (Bad Request) status code' do
+        expect(last_response.status).to be 400
+      end
+
+      it 'Returns the correct body' do
+        expect(last_response.body).to include_json(
+          field: 'client_secret', error: 'wrong'
+        )
+      end
+    end
+
     describe 'when the authorization code belongs to another app' do
       let!(:second_app) do
         create(:application, name: 'Another brilliant app', creator: account)
@@ -112,7 +156,8 @@ RSpec.describe Controllers::Tokens do
       before do
         post '/', {
           client_id: second_app.client_id,
-          authorization_code: authorization.code
+          authorization_code: authorization.code,
+          client_secret: second_app.client_secret
         }
       end
 
