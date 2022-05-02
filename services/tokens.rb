@@ -23,8 +23,13 @@ module Services
     # @return [Decorators::Token] a token decorated with the corresponding
     #   decorator providing the to_h convenience method.
     def create(application, authorization)
+      api_bad_request('client_id', 'mismatch') if authorization.application.id != application.id
       token = Core::Models::OAuth::AccessToken.create(authorization: authorization)
       Decorators::Token.new(token)
+    end
+
+    def api_bad_request(field, error)
+      raise Core::Helpers::Errors::BadRequest.new(field: field, error: error)
     end
   end
 end
