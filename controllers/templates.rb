@@ -7,6 +7,10 @@ module Controllers
   class Templates < Base
     init_csrf
 
+    configure do
+      set :protection, except: :frame_options
+    end
+
     get '/*' do
       erb :login, locals: {
         csrf_token: env['rack.session'][:csrf],
