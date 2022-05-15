@@ -12,9 +12,10 @@ ENV['RACK_ENV'] = 'test'
 Mongoid.load!(fp('../config/mongoid.yml'), :test)
 
 require 'uri/https'
+require fp('../helpers/csrf')
 require fp('../controllers/base')
 
 require_rel 'support/**/*.rb'
-%w[helpers decorators services controllers].each do |folder|
+%w[decorators services controllers].each do |folder|
   require_rel "../#{folder}/**/*.rb"
 end
