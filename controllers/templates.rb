@@ -8,7 +8,7 @@ module Controllers
     init_csrf
 
     get '/*' do
-      erb :login, locals: {ui_root: env['UI_ROOT_PATH']}
+      erb :login, locals: { ui_root: env['UI_ROOT_PATH'] }
     end
   end
 end
