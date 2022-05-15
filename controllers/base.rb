@@ -46,7 +46,7 @@ module Controllers
       return if ENV.fetch('RACK_ENV', 'development') == 'test'
 
       use Rack::Session::Cookie, secret: 'secret'
-      use Rack::Protection::AuthenticityToken
+      use Rack::Csrf, :raise => true
     end
   end
 end

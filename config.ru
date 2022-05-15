@@ -5,6 +5,7 @@ require 'draper'
 require 'core'
 require 'dotenv/load'
 require 'bcrypt'
+require 'rack/csrf'
 
 Dotenv.load
 
@@ -13,6 +14,7 @@ Mongoid.load!('config/mongoid.yml', ENV['RACK_ENV'].to_sym || :development)
 require './lib/uri'
 require './controllers/base'
 
+require_rel 'helpers/**/*.rb'
 require_rel 'services/**/*.rb'
 require_rel 'decorators/**/*.rb'
 require_rel 'controllers/**/*.rb'
