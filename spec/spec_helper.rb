@@ -15,6 +15,6 @@ require 'uri/https'
 require fp('../controllers/base')
 
 require_rel 'support/**/*.rb'
-%w[decorators services controllers].each do |folder|
+%w[helpers decorators services controllers].each do |folder|
   require_rel "../#{folder}/**/*.rb"
 end
