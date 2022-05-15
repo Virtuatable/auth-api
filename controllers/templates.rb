@@ -5,18 +5,10 @@ module Controllers
   # @todo : put the files on an S3 or any external storage
   # @author Vincent Courtois <courtois.vincent@outlook.com>
   class Templates < Base
-    helpers Helpers::Csrf
-
     init_csrf
 
-    configure do
-      set :protection, except: :frame_options
-    end
-
     get '/*' do
-      erb :login, locals: {
-        ui_root: env['UI_ROOT_PATH']
-      }
+      erb :login, locals: {ui_root: env['UI_ROOT_PATH']}
     end
   end
 end

@@ -5,10 +5,13 @@ module Controllers
   # route-focused syntax in each of them by putting shared methods here.
   # @author Vincent Courtois <courtois.vincent@outlook.com>
   class Base < Core::Controllers::Base
+    helpers Helpers::Csrf
+
     configure do
       set :root, File.absolute_path(File.join(File.dirname(__FILE__), '..'))
       set :views, (proc { File.join(root, 'views') })
       set :public_folder, File.join(settings.root, 'public')
+      set :protection, except: :frame_options
     end
 
     def applications
