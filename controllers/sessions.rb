@@ -8,15 +8,11 @@ module Controllers
     init_csrf
 
     get '/:session_id' do
-      halt 200, service.get_by_id(**sym_params).to_json
+      halt 200, Core.svc.sessions.get_by_id(**sym_params).to_json
     end
 
     post '/' do
-      api_created service.create_from_credentials(**sym_params)
-    end
-
-    def service
-      Core.svc.sessions
+      api_created Core.svc.sessions.create_from_credentials(**sym_params)
     end
   end
 end
