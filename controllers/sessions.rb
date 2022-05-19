@@ -8,12 +8,11 @@ module Controllers
     init_csrf
 
     get '/:session_id' do
-      return 200, Decorators::Session.new(session).to_h.to_json
+      halt 200, Core.svc.sessions.get_by_id(**sym_params).to_json
     end
 
     post '/' do
-      check_password
-      halt 201, { session: Services::Sessions.instance.create(account) }.to_json
+      api_created Core.svc.sessions.create_from_credentials(**sym_params)
     end
   end
 end

@@ -6,10 +6,8 @@ module Controllers
   # @author Vincent Courtois <courtois.vincent@outlook.com>
   class Applications < Base
     get '/:client_id' do
-      halt 200, {
-        application: Decorators::Application.new(application).to_h,
-        redirect_uri: redirect_uri
-      }.to_json
+      application = Core.svc.applications.get_by_id(**sym_params)
+      halt 200, { application: application.to_h, redirect_uri: redirect_uri }.to_json
     end
   end
 end

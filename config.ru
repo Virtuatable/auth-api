@@ -15,9 +15,6 @@ require_rel 'helpers/**/*.rb'
 
 require './lib/uri'
 require './controllers/base'
-
-require_rel 'services/**/*.rb'
-require_rel 'decorators/**/*.rb'
 require_rel 'controllers/**/*.rb'
 
 root = ENV.fetch('UI_ROOT_PATH', nil) || ''
@@ -25,6 +22,5 @@ root = ENV.fetch('UI_ROOT_PATH', nil) || ''
 map("#{root}/applications") { run Controllers::Applications.new }
 map("#{root}/authorizations") { run Controllers::Authorizations.new }
 map("#{root}/sessions") { run Controllers::Sessions.new }
-map("#{root}/tokens") { run Controllers::Tokens.new }
 map("#{root}/ui") { run Controllers::Templates.new }
 map('/') { run Controllers::Base.new }

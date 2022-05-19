@@ -29,7 +29,14 @@ module Controllers
     end
 
     def session
-      Decorators::Session.new(super)
+      return @session unless @session.nil?
+
+      check_presence 'session_id'
+      session = Core::Models::Authentication::Session.find_by(token: params['session_id'])
+      api_not_found('session_id.unknown') if session.nil?
+
+      @session = Decorators::Session.new(session)
+      @session
     end
 
     def account
