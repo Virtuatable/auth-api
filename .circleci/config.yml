@@ -11,14 +11,14 @@ jobs:
     steps:
       - checkout
       - run:
-          command: bundle install && bundle exec rspec
+          command: bundle update && bundle exec rspec
   rubocop:
     docker:
       - image: cimg/ruby:3.0.0
     steps:
       - checkout
       - run:
-          command: bundle install && bundle exec rubocop
+          command: bundle update && bundle exec rubocop
   deploy:
     docker:
       - image: cimg/ruby:3.0.0
