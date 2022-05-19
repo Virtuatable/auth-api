@@ -7,7 +7,7 @@ group :development, :production, :test do
   gem 'draper'
   gem 'rack_csrf', require: 'rack/csrf'
   gem 'require_all'
-  gem 'virtuatable-core', '1.3.1', require: 'core'
+  gem 'virtuatable-core', path: '../../core', require: 'core'
 end
 
 group :development, :production do

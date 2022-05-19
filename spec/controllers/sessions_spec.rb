@@ -58,7 +58,7 @@ RSpec.describe Controllers::Sessions do
       end
       it 'Returns the correct body' do
         expect(last_response.body).to include_json(
-          session: { token: Core::Models::Authentication::Session.first.token }
+          token: Core::Models::Authentication::Session.first.token
         )
       end
     end

@@ -8,11 +8,7 @@ module Controllers
     init_csrf
 
     post '/' do
-      authorization = Core::Models::OAuth::Authorization.create(
-        account: session.account,
-        application: application
-      )
-      halt 201, { code: authorization.code }.to_json
+      api_created Core.svc.authorizations.create_from_session(**sym_params)
     end
   end
 end
