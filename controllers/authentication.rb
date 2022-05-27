@@ -40,6 +40,15 @@ module Controllers
       erb :login, locals: { ui_root: env['UI_ROOT_PATH'] }
     end
 
+    error Rack::Csrf::InvalidCsrfToken do
+      halt 403, {
+        field: Rack::Csrf.field,
+        header: Rack::Csrf.header,
+        message: 'invalid',
+        token: Rack::Csrf.token(ENV.fetch('RACK_ENV', 'development'))
+      }
+    end
+
     def redirect_uri
       check_presence 'redirect_uri'
       uri = params['redirect_uri']
