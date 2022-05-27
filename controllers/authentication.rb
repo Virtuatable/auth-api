@@ -41,11 +41,12 @@ module Controllers
     end
 
     error Rack::Csrf::InvalidCsrfToken do
+      puts 'Caught an invalid token error'
       halt 403, {
         field: Rack::Csrf.field,
         header: Rack::Csrf.header,
         message: 'invalid',
-        token: Rack::Csrf.token(ENV.fetch('RACK_ENV', 'development'))
+        token: Rack::Csrf.token(env)
       }
     end
 
