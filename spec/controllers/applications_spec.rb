@@ -1,17 +1,17 @@
 # frozen_string_literal: true
 
-RSpec.describe Controllers::Applications do
+RSpec.describe Controllers::Authentication do
   def app
-    Controllers::Applications.new
+    Controllers::Authentication.new
   end
 
-  describe 'GET /' do
+  describe 'GET /applications/:id' do
     let!(:account) { create(:account) }
     let!(:application) { create(:application, creator: account) }
 
     describe 'Nominal case' do
       before do
-        get "/#{application.client_id}?redirect_uri=#{application.redirect_uris.first}"
+        get "/applications/#{application.client_id}?redirect_uri=#{application.redirect_uris.first}"
       end
 
       it 'Returns a 200 (OK) status code' do
@@ -34,7 +34,7 @@ RSpec.describe Controllers::Applications do
       let!(:uri) { "#{application.redirect_uris.first}?foo=bar" }
 
       before do
-        get "/#{application.client_id}?redirect_uri=#{CGI.escape(uri)}"
+        get "/applications/#{application.client_id}?redirect_uri=#{CGI.escape(uri)}"
       end
 
       it 'Returns a 200 (OK) status code' do
@@ -55,7 +55,7 @@ RSpec.describe Controllers::Applications do
 
     describe 'when the redirection URI is not given' do
       before do
-        get "/#{application.client_id}"
+        get "/applications/#{application.client_id}"
       end
 
       it 'Returns a 400 (Bad Request) status code' do
@@ -71,7 +71,7 @@ RSpec.describe Controllers::Applications do
 
     describe 'when the application does not exist' do
       before do
-        get '/unknown?redirect_uri=unknown'
+        get '/applications/unknown?redirect_uri=unknown'
       end
 
       it 'Returns a 404 (Not Found) status code' do
@@ -87,7 +87,7 @@ RSpec.describe Controllers::Applications do
 
     describe 'when the redirection URI is not in the application' do
       before do
-        get "/#{application.client_id}?redirect_uri=unknown"
+        get "/applications/#{application.client_id}?redirect_uri=unknown"
       end
 
       it 'Returns a 404 (Not Found) status code' do
