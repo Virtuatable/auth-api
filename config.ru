@@ -16,4 +16,4 @@ require './lib/uri'
 require './controllers/authentication'
 
 root = ENV.fetch('UI_ROOT_PATH', nil) || '/'
-map("#{root}") { run Controllers::Authentication.new }
+map(root.to_s) { run Controllers::Authentication.new }

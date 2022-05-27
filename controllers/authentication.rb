@@ -8,7 +8,7 @@ module Controllers
     helpers Helpers::Csrf
 
     if ENV.fetch('RACK_ENV', 'development') != 'test'
-      puts "Initialisation of the CSRF tokens security"
+      puts 'Initialisation of the CSRF tokens security'
       use Rack::Session::Cookie, secret: 'secret'
       use Rack::Csrf
     end
