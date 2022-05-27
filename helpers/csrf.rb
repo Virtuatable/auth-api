@@ -5,7 +5,7 @@ module Helpers
   # @author Vincent Courtois <courtois.vincent@outlook.com>
   module Csrf
     def csrf_tag
-      Rack::Csrf.csrf_tag(env)
+      Rack::Csrf.csrf_tag(ENV.fetch('RACK_ENV', 'development'))
     end
   end
 end
