@@ -1,19 +1,19 @@
 # frozen_string_literal: true
 
-RSpec.describe Controllers::Sessions do
+RSpec.describe Controllers::Authentication do
   def app
-    Controllers::Sessions.new
+    Controllers::Authentication.new
   end
 
   let!(:account) { create(:account) }
   let!(:application) { create(:application, creator: account) }
 
-  describe 'GET /:session_id' do
+  describe 'GET /sessions/:session_id' do
     describe 'Nominal case' do
       let!(:session) { create(:session, account: account) }
 
       before do
-        get "/#{session.token}"
+        get "/sessions/#{session.token}"
       end
 
       it 'Returns a 200 (OK) status code' do
@@ -29,7 +29,7 @@ RSpec.describe Controllers::Sessions do
 
     describe 'Session UUID not found' do
       before do
-        get '/unknown-session'
+        get '/sessions/unknown-session'
       end
 
       it 'Returns a 404 (Not Found) status code' do
@@ -44,10 +44,10 @@ RSpec.describe Controllers::Sessions do
     end
   end
 
-  describe 'POST /' do
+  describe 'POST /sessions' do
     describe 'Nominal case' do
       before do
-        post '/', {
+        post '/sessions', {
           username: account.username,
           password: 'password'
         }
@@ -65,7 +65,7 @@ RSpec.describe Controllers::Sessions do
 
     describe 'when the username is not given' do
       before do
-        post '/', {
+        post '/sessions', {
           password: 'password'
         }
       end
@@ -84,7 +84,7 @@ RSpec.describe Controllers::Sessions do
 
     describe 'when the password is not given' do
       before do
-        post '/', {
+        post '/sessions', {
           username: account.username
         }
       end
@@ -103,7 +103,7 @@ RSpec.describe Controllers::Sessions do
 
     describe 'when the username is not found' do
       before do
-        post '/', { username: 'unknown', password: 'password' }
+        post '/sessions', { username: 'unknown', password: 'password' }
       end
 
       it 'Returns a 404 (Not Found) status code' do
@@ -119,7 +119,7 @@ RSpec.describe Controllers::Sessions do
 
     describe 'when the password is not correct' do
       before do
-        post '/', { username: account.username, password: 'wrong_password' }
+        post '/sessions', { username: account.username, password: 'wrong_password' }
       end
 
       it 'Returns a 403 (Forbidden) status code' do

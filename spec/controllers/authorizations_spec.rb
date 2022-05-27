@@ -1,18 +1,18 @@
 # frozen_string_literal: true
 
-RSpec.describe Controllers::Authorizations do
+RSpec.describe Controllers::Authentication do
   def app
-    Controllers::Authorizations.new
+    Controllers::Authentication.new
   end
 
   let!(:account) { create(:account) }
   let!(:application) { create(:application, creator: account) }
   let!(:session) { create(:session, account: account) }
 
-  describe 'POST /' do
+  describe 'POST /authorizations' do
     describe 'Nominal case' do
       before do
-        post '/', {
+        post '/authorizations', {
           session_id: session.token,
           client_id: application.client_id
         }
@@ -31,7 +31,7 @@ RSpec.describe Controllers::Authorizations do
 
     describe 'when the session ID is not given' do
       before do
-        post '/', { application_id: application.client_id }
+        post '/authorizations', { application_id: application.client_id }
       end
 
       it 'Returns a 400 (Bad Request) status code' do
@@ -47,7 +47,7 @@ RSpec.describe Controllers::Authorizations do
 
     describe 'when the session ID is not found' do
       before do
-        post '/', {
+        post '/authorizations', {
           application_id: application.client_id,
           session_id: 'unknown'
         }
@@ -66,7 +66,7 @@ RSpec.describe Controllers::Authorizations do
 
     describe 'when the application ID is not given' do
       before do
-        post '/', {
+        post '/authorizations', {
           session_id: session.token
         }
       end
@@ -84,7 +84,7 @@ RSpec.describe Controllers::Authorizations do
 
     describe 'when the application ID is not found' do
       before do
-        post '/', {
+        post '/authorizations', {
           client_id: 'unknown',
           session_id: session.token
         }
