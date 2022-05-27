@@ -5,13 +5,11 @@ require 'draper'
 require 'core'
 require 'dotenv/load'
 require 'bcrypt'
-require 'rack/csrf'
 
 Dotenv.load
 
 Mongoid.load!('config/mongoid.yml', ENV['RACK_ENV'].to_sym || :development)
 
-require './helpers/csrf'
 require './lib/uri'
 require './controllers/authentication'
 

@@ -5,7 +5,6 @@ source 'https://rubygems.org/'
 group :development, :production, :test do
   gem 'dotenv'
   gem 'draper'
-  gem 'rack_csrf', require: 'rack/csrf'
   gem 'require_all'
   gem 'virtuatable-core', '1.7.0', require: 'core'
 end

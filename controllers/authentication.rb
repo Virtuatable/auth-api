@@ -5,13 +5,6 @@ module Controllers
   # route-focused syntax in each of them by putting shared methods here.
   # @author Vincent Courtois <courtois.vincent@outlook.com>
   class Authentication < Core::Controllers::Base
-    helpers Helpers::Csrf
-
-    if ENV.fetch('RACK_ENV', 'development') != 'test'
-      use Rack::Session::Cookie, secret: 'secret'
-      use Rack::Csrf, raise: true
-    end
-
     configure do
       set :root, File.absolute_path(File.join(File.dirname(__FILE__), '..'))
       set :views, (proc { File.join(root, 'views') })
@@ -38,16 +31,6 @@ module Controllers
 
     get '/*' do
       erb :login, locals: { ui_root: env['UI_ROOT_PATH'] }
-    end
-
-    error Rack::Csrf::InvalidCsrfToken do
-      puts 'Caught an invalid token error'
-      halt 403, {
-        field: Rack::Csrf.field,
-        header: Rack::Csrf.header,
-        message: 'invalid',
-        token: Rack::Csrf.token(env)
-      }
     end
 
     def redirect_uri

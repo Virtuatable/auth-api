@@ -12,7 +12,6 @@ end
 Mongoid.load!(fp('../config/mongoid.yml'), ENV['RACK_ENV'].to_sym)
 
 require 'uri/https'
-require fp('../helpers/csrf')
 require fp('../controllers/authentication')
 
 require_rel 'support/**/*.rb'
